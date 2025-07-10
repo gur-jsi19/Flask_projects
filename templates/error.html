@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeatherFlow | Oops!</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS Variables for consistent theming */
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --error: #ef4444;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6b7280;
+        }
+
+        /* Base Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box; /* Includes padding in width calculations */
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%); /* Soft red gradient */
+            min-height: 100vh; /* Full viewport height */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--dark);
+            line-height: 1.6; /* Better text readability */
+        }
+
+        /* Main Error Card Container */
+        .error-card {
+            background: rgba(255, 255, 255, 0.98); /* Nearly white with slight transparency */
+            backdrop-filter: blur(8px); /* Frosted glass effect */
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(239, 68, 68, 0.15); /* Soft red shadow */
+            width: 100%;
+            max-width: 500px;
+            padding: 40px;
+            text-align: center;
+            animation: shake 0.6s cubic-bezier(.36,.07,.19,.97) both; /* Attention-grabbing animation */
+            transform: translate3d(0, 0, 0);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Shake animation for error state */
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
+        /* Red accent bar at top */
+        .error-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(to right, var(--error), #f87171); /* Error gradient */
+        }
+
+        /* Error icon styling */
+        .error-icon {
+            font-size: 5rem;
+            color: var(--error);
+            margin-bottom: 20px;
+            animation: pulse 2s infinite; /* Pulsing animation */
+        }
+
+        /* Pulsing animation for icon */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Error heading */
+        h1 {
+            color: var(--error);
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        /* Error message text */
+        .error-message {
+            font-size: 1.1rem;
+            color: var(--gray);
+            margin-bottom: 30px;
+            padding: 0 10px;
+        }
+
+        /* Action buttons container */
+        .actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap; /* Wrap on small screens */
+        }
+
+        /* Base button styling */
+        .btn {
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        /* Primary action button */
+        .btn-primary {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        /* Secondary action button */
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Hover effects for buttons */
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.4);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .error-card {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .error-icon {
+                font-size: 4rem;
+            }
+            
+            .actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Debug info styling (optional) */
+        .debug-info {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px dashed #e5e7eb;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+    </style>
+</head>
+<body>
+    <div class="error-card">
+        <!-- Error icon with animation -->
+        <div class="error-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        
+        <!-- Error heading -->
+        <h1>Oops! Something Went Wrong</h1>
+        
+        <!-- Dynamic error message from Flask -->
+        <p class="error-message">{{ message }}</p>
+        
+        <!-- Action buttons -->
+        <div class="actions">
+            <!-- Primary action - Try Again -->
+            <a href="/" class="btn btn-primary">
+                <i class="fas fa-redo"></i> Try Again
+            </a>
+            
+            <!-- Secondary action - Go Home -->
+            <a href="/" class="btn btn-secondary">
+                <i class="fas fa-home"></i> Go Home
+            </a>
+        </div>
+        
+        <!-- Optional debug info section -->
+        <!-- <div class="debug-info">
+            Error code: 404 | Request ID: 12345
+        </div> -->
+    </div>
+</body>
+</html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Basic Meta Tags -->
+    <meta charset="UTF-8"> <!-- Character encoding -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsive viewport -->
+    <title>WeatherFlow | Results</title> <!-- Browser tab title -->
+    
+    <!-- External Resources -->
+    <!-- Google Fonts - Poppins with multiple weights -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* CSS Variables for easy theming */
+        :root {
+            --primary: #4361ee;       /* Main brand color */
+            --secondary: #3f37c9;     /* Darker blue */
+            --accent: #4cc9f0;        /* Light blue accent */
+            --light: #f8f9fa;         /* Off-white */
+            --dark: #212529;          /* Dark gray for text */
+            --success: #4ade80;       /* Green for success states */
+            --warning: #f59e0b;       /* Yellow/orange for warnings */
+            --error: #ef4444;         /* Red for errors */
+        }
+
+        /* Reset default browser styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box; /* Includes padding in width calculations */
+        }
+
+        /* Base page styling */
+        body {
+            font-family: 'Poppins', sans-serif; /* Using imported font */
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); /* Subtle gradient bg */
+            min-height: 100vh; /* Full viewport height */
+            display: flex;
+            justify-content: center; /* Horizontal centering */
+            align-items: center; /* Vertical centering */
+            padding: 20px; /* Spacing on small screens */
+            color: var(--dark); /* Default text color */
+        }
+
+        /* Main weather card container */
+        .weather-container {
+            background: rgba(255, 255, 255, 0.95); /* Semi-transparent white */
+            backdrop-filter: blur(10px); /* Frosted glass effect */
+            border-radius: 20px; /* Rounded corners */
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1); /* Soft shadow */
+            width: 100%;
+            max-width: 600px; /* Maximum width on large screens */
+            padding: 40px; /* Internal spacing */
+            text-align: center;
+            animation: fadeIn 0.6s ease-out; /* Entry animation */
+            overflow: hidden; /* Keeps child elements within bounds */
+            position: relative; /* For pseudo-element positioning */
+        }
+
+        /* Fade-in animation definition */
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; /* Start invisible */
+                transform: translateY(20px); /* Start slightly below */
+            }
+            to { 
+                opacity: 1; /* Fade to fully visible */
+                transform: translateY(0); /* Move to normal position */
+            }
+        }
+
+        /* Header section styling */
+        .weather-header {
+            margin-bottom: 30px; /* Space below header */
+            position: relative; /* Positioning context */
+        }
+
+        /* Main heading style */
+        h1 {
+            font-size: 2.2rem; /* Responsive font size */
+            margin-bottom: 5px; /* Space below heading */
+            background: linear-gradient(to right, var(--primary), var(--accent)); /* Gradient text */
+            -webkit-background-clip: text; /* Clip background to text */
+            background-clip: text;
+            color: transparent; /* Hide base color to show gradient */
+            font-weight: 700; /* Bold weight */
+        }
+
+        /* Location display styling */
+        .location {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px; /* Space between icon and text */
+            color: var(--dark);
+            opacity: 0.8; /* Slightly transparent */
+            font-size: 1.1rem; /* Slightly larger than body text */
+        }
+
+        /* Location icon styling */
+        .location i {
+            color: var(--primary); /* Brand color for icon */
+        }
+
+        /* Main weather content area */
+        .weather-main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 30px 0; /* Vertical spacing */
+        }
+
+        /* Temperature display styling */
+        .temperature {
+            font-size: 4.5rem; /* Very large text */
+            font-weight: 300; /* Light weight for elegance */
+            background: linear-gradient(to right, var(--primary), var(--secondary)); /* Gradient */
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1; /* Tight line spacing */
+            margin: 15px 0; /* Vertical spacing */
+            position: relative; /* For pseudo-element positioning */
+        }
+
+        /* Degree symbol styling */
+        .temperature::after {
+            content: '°C'; /* Add degree symbol */
+            font-size: 1.5rem; /* Smaller than temperature */
+            position: absolute;
+            top: 10px; /* Positioned slightly above */
+        }
+
+        /* Weather icon container */
+        .weather-icon {
+            width: 120px; /* Fixed size */
+            height: 120px;
+            margin: 0 auto; /* Centered */
+            filter: drop-shadow(0 5px 10px rgba(67, 97, 238, 0.2)); /* Soft shadow */
+            animation: float 6s ease-in-out infinite; /* Continuous floating animation */
+        }
+
+        /* Floating animation definition */
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0); /* Normal position */
+            }
+            50% { 
+                transform: translateY(-15px); /* Raised position */
+            }
+        }
+
+        /* Weather description text */
+        .description {
+            font-size: 1.4rem;
+            text-transform: capitalize; /* First letter uppercase */
+            margin: 10px 0;
+            color: var(--dark);
+            opacity: 0.9; /* Slightly transparent */
+        }
+
+        /* Weather details grid container */
+        .weather-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 2-column layout */
+            gap: 20px; /* Space between cards */
+            margin-top: 40px; /* Space above grid */
+        }
+
+        /* Individual detail card styling */
+        .detail-card {
+            background: rgba(245, 247, 250, 0.6); /* Semi-transparent light bg */
+            border-radius: 15px; /* Rounded corners */
+            padding: 20px; /* Internal spacing */
+            transition: all 0.3s ease; /* Smooth hover transition */
+            text-align: center;
+        }
+
+        /* Hover effect for detail cards */
+        .detail-card:hover {
+            transform: translateY(-5px); /* Lift effect */
+            background: rgba(255, 255, 255, 0.9); /* More opaque on hover */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05); /* Deeper shadow */
+        }
+
+        /* Icon styling in detail cards */
+        .detail-card i {
+            font-size: 1.8rem; /* Large icons */
+            color: var(--primary); /* Brand color */
+            margin-bottom: 10px; /* Space below icon */
+        }
+
+        /* Detail title text */
+        .detail-title {
+            font-size: 0.9rem;
+            opacity: 0.7; /* Slightly transparent */
+            margin-bottom: 5px; /* Space above value */
+        }
+
+        /* Detail value text */
+        .detail-value {
+            font-size: 1.2rem;
+            font-weight: 600; /* Semi-bold */
+        }
+
+        /* Back button styling */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px; /* Space between icon and text */
+            margin-top: 40px; /* Space above button */
+            padding: 12px 25px; /* Button padding */
+            border-radius: 50px; /* Pill shape */
+            background: var(--light); /* Light background */
+            color: var(--primary); /* Brand color text */
+            text-decoration: none; /* Remove underline */
+            font-weight: 600; /* Bold text */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+            transition: all 0.3s ease; /* Smooth transitions */
+        }
+
+        /* Back button hover state */
+        .back-btn:hover {
+            transform: translateY(-3px); /* Lift effect */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Deeper shadow */
+            background: var(--primary); /* Brand color background */
+            color: white; /* White text */
+        }
+
+        /* Dynamic header accent based on weather */
+        .weather-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px; /* Thin header line */
+            background: linear-gradient(to right, var(--primary), var(--accent)); /* Default gradient */
+        }
+
+        /* Clear weather header style */
+        .clear .weather-container::before {
+            background: linear-gradient(to right, #4cc9f0, #4361ee); /* Sky blue gradient */
+        }
+        
+        /* Rain weather header style */
+        .rain .weather-container::before {
+            background: linear-gradient(to right, #3a7bd5, #00d2ff); /* Rainy blue gradient */
+        }
+        
+        /* Clouds weather header style */
+        .clouds .weather-container::before {
+            background: linear-gradient(to right, #bdc3c7, #2c3e50); /* Gray gradient */
+        }
+
+        /* Responsive adjustments for mobile */
+        @media (max-width: 600px) {
+            .weather-container {
+                padding: 30px 20px; /* Less padding on small screens */
+            }
+            
+            /* Stack detail cards on mobile */
+            .weather-details {
+                grid-template-columns: 1fr; /* Single column */
+            }
+            
+            /* Smaller temperature display */
+            .temperature {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main container with dynamic weather class -->
+    <div class="weather-container {{ weather.description.lower().replace(' ', '') }}">
+        <!-- Header section -->
+        <div class="weather-header">
+            <h1>WeatherFlow</h1>
+            <div class="location">
+                <i class="fas fa-map-marker-alt"></i> <!-- Location icon -->
+                <span>{{ weather.city }}</span> <!-- Dynamic city name -->
+            </div>
+        </div>
+
+        <!-- Main weather display -->
+        <div class="weather-main">
+            <!-- Dynamic weather icon from OpenWeatherMap -->
+            <img src="http://openweathermap.org/img/wn/{{ weather.icon }}@4x.png" 
+                 alt="Weather icon" 
+                 class="weather-icon">
+            <!-- Dynamic temperature -->
+            <div class="temperature">{{ weather.temperature }}</div>
+            <!-- Weather description -->
+            <div class="description">{{ weather.description }}</div>
+        </div>
+
+        <!-- Weather details grid -->
+        <div class="weather-details">
+            <!-- Wind speed card -->
+            <div class="detail-card">
+                <i class="fas fa-wind"></i> <!-- Wind icon -->
+                <div class="detail-title">Wind Speed</div>
+                <div class="detail-value">12 km/h</div> <!-- Will be dynamic -->
+            </div>
+            <!-- Humidity card -->
+            <div class="detail-card">
+                <i class="fas fa-tint"></i> <!-- Humidity icon -->
+                <div class="detail-title">Humidity</div>
+                <div class="detail-value">65%</div> <!-- Will be dynamic -->
+            </div>
+            <!-- Pressure card -->
+            <div class="detail-card">
+                <i class="fas fa-compress-alt"></i> <!-- Pressure icon -->
+                <div class="detail-title">Pressure</div>
+                <div class="detail-value">1012 hPa</div> <!-- Will be dynamic -->
+            </div>
+            <!-- Visibility card -->
+            <div class="detail-card">
+                <i class="fas fa-eye"></i> <!-- Visibility icon -->
+                <div class="detail-title">Visibility</div>
+                <div class="detail-value">10 km</div> <!-- Will be dynamic -->
+            </div>
+        </div>
+
+        <!-- Back to search button -->
+        <a href="/" class="back-btn">
+            <i class="fas fa-arrow-left"></i> <!-- Arrow icon -->
+            Search Again <!-- Button text -->
+        </a>
+    </div>
+</body>
+</html>
