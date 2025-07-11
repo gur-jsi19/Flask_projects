@@ -1,7 +1,7 @@
 # Import necessary tools from Flask and the 'requests' library
 from flask import Flask, render_template, request  # Flask tools for web app and templates
 import requests  # To fetch data from the OpenWeatherMap API
-import os
+import os       #importing the os library
 
 # Initialize the Flask application
 app = Flask(__name__)  # Creates the Flask app object
